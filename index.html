@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Debate en El Colorado · David y Tecno</title>
+<meta name="description" content="David (agroecología) y Tecno (agricultura convencional-tradicional) debaten en una chacra de El Colorado, Formosa. Mirá el debate o hablá con cada uno.">
+<meta property="og:title" content="Debate en El Colorado · David y Tecno">
+<meta property="og:description" content="Dos humanos digitales, dos formas de cultivar. Mirá el debate o hablá con cada uno.">
+<meta property="og:image" content="tecno-referencia.jpg">
+<style>
+:root{
+  --tinta:#2b2218; --suave:#5c4d3b; --lino:#fbf5e4; --borde:#d8c79e;
+  --hoja:#3f6b2a; --hoja-osc:#2d4f1d; --oro:#e59a14; --cian:#1b8fa6;
+  --doc:#2f6b3a; --atr:#9a5b00; --con:#8a2f3a; --did:#2d5d8a; --pra:#1f6f68; --vivo:#4a4a4a;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#1d2a3a;color:var(--tinta);font:16px/1.45 Georgia,"Times New Roman",serif;overflow:hidden;-webkit-text-size-adjust:100%}
+canvas#escena{position:fixed;inset:0;width:100%;height:100%;display:block}
+.sans{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+
+#top{position:fixed;left:max(14px,env(safe-area-inset-left));top:max(12px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+#top h1{margin:0;font:700 clamp(1rem,2.4vw,1.35rem)/1.1 system-ui,sans-serif;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+#top h1 small{display:block;margin-top:3px;font:500 .72rem/1.2 system-ui,sans-serif;opacity:.9;letter-spacing:.04em}
+#horas{display:flex;gap:6px;pointer-events:auto;flex-wrap:wrap;justify-content:flex-end}
+#horas button{font:600 .78rem/1 system-ui,sans-serif;border:1px solid rgba(255,255,255,.55);background:rgba(20,20,20,.38);color:#fff;border-radius:999px;padding:.5rem .7rem;min-height:34px;cursor:pointer;backdrop-filter:blur(4px)}
+#horas button[aria-pressed="true"]{background:#fff;color:#2b2218;border-color:#fff}
+#horas button:focus-visible,.panel button:focus-visible,.panel summary:focus-visible{outline:3px solid var(--oro);outline-offset:2px}
+
+.panel{position:fixed;left:50%;transform:translateX(-50%);bottom:max(10px,env(safe-area-inset-bottom));width:min(980px,calc(100% - 20px));background:rgba(251,245,228,.94);border:1px solid var(--borde);border-radius:14px;box-shadow:0 12px 34px rgba(20,12,4,.35);padding:12px 14px 10px;backdrop-filter:blur(6px);max-height:62vh;overflow:auto}
+.cap{display:flex;gap:12px;align-items:flex-start;min-height:4.6em}
+.cap img{width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:top;border:3px solid var(--borde);flex:none;background:#e9dfc2}
+.cap.david img{border-color:var(--hoja)} .cap.tecno img{border-color:var(--cian)}
+.cap .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:3px;font-family:system-ui,sans-serif}
+.cap .who{font-weight:700;font-size:.92rem}
+.badge{font:700 .66rem/1 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.3rem .5rem;border-radius:999px}
+.b-doc{background:var(--doc)}.b-atr{background:var(--atr)}.b-con{background:var(--con)}.b-did{background:var(--did)}.b-pra{background:var(--pra)}.b-vivo{background:var(--vivo)}
+.cap p{margin:0;font-size:1.02rem}
+.cap .src{display:block;margin-top:4px;font:.78rem/1.3 system-ui,sans-serif;color:var(--suave)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.panel button.b{font:600 .92rem/1 system-ui,sans-serif;min-height:42px;padding:.55rem 1rem;border-radius:9px;border:1px solid var(--hoja);background:transparent;color:var(--hoja-osc);cursor:pointer}
+.panel button.b:hover{background:rgba(63,107,42,.1)}
+.panel button.b.pri{background:var(--hoja);color:#fff}
+.panel button.b.pri:hover{background:var(--hoja-osc)}
+.panel button.b.tec{border-color:var(--cian);color:#0f5f70}
+.panel button.b.tec:hover{background:rgba(27,143,166,.1)}
+.panel button.b.on{background:#c8382a;border-color:#c8382a;color:#fff}
+.panel button.b:disabled{opacity:.55;cursor:wait}
+.prog{margin-left:auto;font:.78rem system-ui,sans-serif;color:var(--suave)}
+.estado{margin:6px 0 0;min-height:1.2em;font:.82rem/1.3 system-ui,sans-serif;color:var(--suave)}
+details.fuentes{margin-top:6px;font:.84rem/1.4 system-ui,sans-serif}
+details.fuentes summary{cursor:pointer;color:var(--suave)}
+details.fuentes ul{margin:6px 0 0;padding-left:1.1rem}
+details.fuentes li{margin:3px 0}
+details.fuentes a{color:var(--hoja-osc)}
+.aviso{margin:8px 0 0;font:.74rem/1.35 system-ui,sans-serif;color:var(--suave)}
+@media (max-width:640px){
+  .cap img{width:42px;height:42px}
+  .cap p{font-size:.97rem}
+  .panel{padding:10px 11px 8px;max-height:58vh}
+  .panel button.b{flex:1 1 auto;padding:.55rem .7rem}
+  .prog{margin-left:0;width:100%}
+  #top h1 small{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.panel{padding:10px 12px 6px;max-height:none}
+#prog{display:none}
+</style>
+</head>
+<body>
+<canvas id="escena" role="img" aria-label="Ilustración: David y Tecno conversan en un camino de tierra colorada entre un lote agroecológico y un lote convencional, en una chacra de El Colorado, Formosa."></canvas>
+
+<div id="sr" class="sr" aria-live="polite"></div>
+<section class="panel" id="panel" aria-label="Controles del debate">
+  <div class="ctrl" id="ctrl">
+    <button class="b pri" id="bDebate" type="button">▶ Ver el debate</button>
+    <button class="b" id="bDavid" type="button">Hablar con David</button>
+    <button class="b tec" id="bTecno" type="button">Hablar con Tecno</button>
+  </div>
+  <div class="ctrl" id="voto" hidden>
+    <span class="prog" style="margin:0;font-size:.9rem">¿Quién te convenció?</span>
+    <button class="b" id="vD" type="button">David</button>
+    <button class="b tec" id="vT" type="button">Tecno</button>
+    <button class="b" id="vE" type="button">Empate</button>
+  </div>
+  <p class="estado" id="estado" role="status"></p>
+  <span id="prog" class="prog"></span>
+</section>
+
+<script>
+(function(){
+'use strict';
+
+/* ================= Configuración ================= */
+var qs=new URLSearchParams(location.search);
+var AGENTES={
+  david:qs.get('david')||'agent_5801m4xxqcvvem3tse0ph99dve0v',
+  tecno:qs.get('tecno')||'agent_3701m5dh96y3fmv8z7hp105g8ab3'
+};
+var HORA_INICIAL=(['manana','mediodia','dorada'].indexOf(qs.get('hora'))>=0)?qs.get('hora'):'dorada';
+var $=function(id){return document.getElementById(id)};
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= Guion del debate ================= */
+var TAGS={
+  doc:{t:'Documentado',c:'b-doc'},atr:{t:'Atribuido',c:'b-atr'},con:{t:'Controvertido',c:'b-con'},
+  did:{t:'Didáctico',c:'b-did'},pra:{t:'Práctica agroecológica',c:'b-pra'}
+};
+var GUION=[
+ {w:'tecno',t:'David, te desafío a un debate. Yo digo que la agricultura convencional alimenta al país y cuida el suelo. Argentina llegó a un récord de unos 140 millones de toneladas de granos en la campaña 2018 y 2019. Eso no sale de una huerta.'},
+ {w:'david',t:'Producir mucho no es lo mismo que cuidar. Un especialista del INTA advirtió que la siembra directa con monocultivo de soja atenta contra la sustentabilidad. Yo cubro el suelo, roto los cultivos por familias y lo mantengo vivo.'},
+ {w:'tecno',pt:'david',t:'Eso te lo anoto: punto para vos. Por eso se recomienda rotar con maíz, trigo o sorgo. Pero fijate lo que logramos. La siembra directa pasó de 0,4% del área en 1989 y 1990 a 80,6% hoy, según Aapresid. Es suelo cubierto, sin arar.'},
+ {w:'david',pt:'tecno',t:'Eso lo reconozco, punto para vos. Cubrir el suelo es algo que compartimos. Pero vamos al glifosato: ¿no te preocupa depender de un herbicida?'},
+ {w:'tecno',t:'Es un tema delicado y no te voy a mentir. En 2015 la IARC lo clasificó como probablemente cancerígeno, y la EFSA, la EPA y la ECHA concluyeron que no hay evidencia suficiente. No es ni veneno seguro ni prueba cerrada: discrepan en qué evalúan.'},
+ {w:'david',t:'Justamente por eso prefiero prevenir. Una plaga es una señal de desequilibrio. Atraigo mariquitas y crisopas con flores, y solo intervengo si el daño supera lo tolerable. Menos dependencia, menos riesgo.'},
+ {w:'tecno',t:'Pregunta honesta, David: eso, ¿funciona en miles de hectáreas, como en el Chaco o en Formosa?'},
+ {w:'david',t:'En la huerta me funciona. Para lotes enormes no tengo datos, y no te voy a inventar nada. Eso lo tendría que decir un técnico del INTA.'},
+ {w:'tecno',t:'Y acá pesa el contexto. Un productor de El Colorado cuenta que hace quince o veinte años había cincuenta a sesenta mil hectáreas de algodón y que hoy predomina la ganadería. Clima difícil y más de mil kilómetros hasta los puertos del Paraná. Es un testimonio, no una estadística.'},
+ {w:'david',t:'Por eso en el subtrópico trabajo con la temporada fresca, de abril a agosto, para hojas y repollos. El calor extremo pide sombra y riego. Árboles y cobertura del suelo ayudan mucho.'},
+ {w:'tecno',t:'Sobre la seguridad de aplicar, el INTA y las normas oficiales sostienen que con buenas prácticas el riesgo es bajo: equipo registrado, clima adecuado, zonas de resguardo y receta de un profesional.'},
+ {w:'david',pt:'tecno',t:'Ahí no tengo un dato para refutarte. Lo oficial dice riesgo bajo con buenas prácticas, aunque hay críticos que dicen que las distancias a escuelas y pueblos no alcanzan. Punto para vos.'},
+ {w:'tecno',pt:'david',t:'Y te concedo algo incómodo. Entre 2002 y 2018, el Censo Nacional Agropecuario pasó de 333 mil a 250 mil explotaciones, unas 82 mil menos, y las sociedades son el 11% de las explotaciones pero el 38% de la superficie. No digo que sea solo culpa de la agricultura convencional, pero es un costo real. Punto para vos.'},
+ {w:'david',t:'Entonces quedamos parejos. Yo gano en cuidar el suelo con diversidad y en depender menos de insumos. Vos ganás en escala y en datos.'},
+ {w:'tecno',t:'De acuerdo en lo central. Suelo cubierto, rotación y aplicar con buenas prácticas. No hay un único ganador: decidí vos, que nos escuchaste.'}
+];
+
+/* ================= Utilidades de color y azar ================= */
+function hex(h){h=h.replace('#','');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]}
+function mixc(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]}
+function css(a,al){return al==null?'rgb('+(a[0]|0)+','+(a[1]|0)+','+(a[2]|0)+')':'rgba('+(a[0]|0)+','+(a[1]|0)+','+(a[2]|0)+','+al+')'}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+
+/* ================= Horas del día ================= */
+var HORAS={
+  manana:{etq:'08:00',cielo:['#6fa6e0','#b9d8ee','#f6edcf'],haze:'#efe6c8',mul:[1,0.99,0.93],hazeD:90,
+    sol:{x:330,y:372,r:30,glow:.55,col:[255,244,200]},sombra:{dx:1,len:.9},tinte:'rgba(255,238,200,0.05)',viñeta:.18,nube:[255,255,255],nubeSombra:[200,214,230],pajaros:true},
+  mediodia:{etq:'12:30',cielo:['#4f98e0','#a9d0ee','#dcecf2'],haze:'#d6e6ec',mul:[1,1,1],hazeD:110,
+    sol:null,sombra:{dx:.15,len:.22},tinte:'rgba(255,255,255,0.0)',viñeta:.1,nube:[255,255,255],nubeSombra:[196,214,232],pajaros:true},
+  dorada:{etq:'18:30',cielo:['#5d79b8','#e9a77f','#f9d9a0'],haze:'#f3cf9c',mul:[1.06,0.9,0.72],hazeD:60,
+    sol:{x:1330,y:392,r:44,glow:.95,col:[255,205,120]},sombra:{dx:-1,len:1.9},tinte:'rgba(255,150,70,0.10)',viñeta:.34,nube:[255,196,150],nubeSombra:[150,110,130],pajaros:true}
+};
+var horaActual=HORA_INICIAL, T=HORAS[horaActual];
+T.hazeC=hex(T.haze);
+
+/* ================= Geometría de la escena (espacio virtual) ================= */
+var HZ=430,F=1000,CH=1.6,CX=800;
+function PX(X,Z){return CX+X*F/Z}
+function PY(Z){return HZ+CH*F/Z}
+function SC(Z){return F/Z}
+function col(h,Z){var c=hex(h);c=[Math.min(255,c[0]*T.mul[0]),Math.min(255,c[1]*T.mul[1]),Math.min(255,c[2]*T.mul[2])];
+  var f=Z?Math.min(.88,1-Math.exp(-Z/T.hazeD)):0;return css(mixc(c,T.hazeC,f))}
+function lit(h){return col(h,0)}
+
+/* ================= Lienzo y vista ================= */
+var cv=$('escena'),ctx=cv.getContext('2d');
+var view={w:0,h:0,dpr:1,s:1,ox:0,oy:0,x0:0,x1:1600,y0:0,y1:900};
+var bgSky=document.createElement('canvas'),bgLand=document.createElement('canvas');
+var bgListo=false;
+
+function medirPanel(){var p=$('panel');return p?p.getBoundingClientRect().height+14:0}
+function resize(){
+  var dpr=Math.min(window.devicePixelRatio||1,2),w=window.innerWidth,h=window.innerHeight;
+  view.dpr=dpr;view.w=w;view.h=h;
+  cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);
+  var ph=medirPanel(),area=Math.max(160,h-ph);
+  // rectángulo seguro: personajes + etiquetas (virtual 380..1220 x 330..870)
+  var s=Math.min(w/(w<600?740:900),area/540);
+  s=Math.max(.3,Math.min(1.7,s));
+  view.s=s;
+  view.ox=w/2-800*s;
+  view.oy=area/2-600*s;
+  view.x0=-view.ox/s;view.x1=(w-view.ox)/s;view.y0=-view.oy/s;view.y1=(h-view.oy)/s;
+  for(var c of [bgSky,bgLand]){c.width=cv.width;c.height=cv.height}
+  bgListo=false;
+}
+function aplicarVista(g){g.setTransform(view.s*view.dpr,0,0,view.s*view.dpr,view.ox*view.dpr,view.oy*view.dpr)}
+
+/* ================= Fondo: cielo ================= */
+function dibujarCielo(){
+  var g=bgSky.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,bgSky.width,bgSky.height);
+  aplicarVista(g);
+  var gr=g.createLinearGradient(0,view.y0-100,0,HZ+4);
+  gr.addColorStop(0,T.cielo[0]);gr.addColorStop(.62,T.cielo[1]);gr.addColorStop(1,T.cielo[2]);
+  g.fillStyle=gr;g.fillRect(view.x0-50,view.y0-120,view.x1-view.x0+100,HZ-view.y0+130);
+  if(T.sol){
+    var s=T.sol,gl=g.createRadialGradient(s.x,s.y,0,s.x,s.y,520);
+    gl.addColorStop(0,css(s.col,s.glow));gl.addColorStop(.18,css(s.col,s.glow*.45));gl.addColorStop(1,css(s.col,0));
+    g.fillStyle=gl;g.fillRect(s.x-600,s.y-600,1200,1200);
+    g.fillStyle=css(mixc(s.col,[255,255,255],.55),.98);g.beginPath();g.arc(s.x,s.y,s.r,0,7);g.fill();
+  }
+}
+
+/* ================= Fondo: tierra, cultivos, monte ================= */
+function tuft(g,x,y,s,c1,c2,R){
+  var n=3;for(var i=0;i<n;i++){var a=(i-1)*.45+(R()-.5)*.2;
+    g.fillStyle=i===1?c2:c1;g.beginPath();g.ellipse(x+Math.sin(a)*s*.25,y-s*.45,s*.11,s*.5,a,0,7);g.fill();}
+}
+function arbolMonte(g,X,Z,alto,ancho,col1,col2){
+  var sc=SC(Z),by=PY(Z),bx=PX(X,Z),h=alto*sc,w=ancho*sc;
+  g.strokeStyle=col('#4a3a2a',Z);g.lineWidth=Math.max(1,.28*sc);g.lineCap='round';
+  g.beginPath();g.moveTo(bx,by);g.lineTo(bx+w*.05,by-h*.7);g.stroke();
+  g.fillStyle=col(col1,Z);g.beginPath();g.ellipse(bx+w*.05,by-h*.78,w,h*.28,0,0,7);g.fill();
+  g.fillStyle=col(col2,Z);g.beginPath();g.ellipse(bx-w*.2,by-h*.86,w*.62,h*.2,0,0,7);g.fill();
+  g.beginPath();g.ellipse(bx+w*.45,by-h*.74,w*.5,h*.17,0,0,7);g.fill();
+}
+function palmera(g,X,Z,alto){
+  var sc=SC(Z),by=PY(Z),bx=PX(X,Z),h=alto*sc;
+  g.strokeStyle=col('#6a5a40',Z);g.lineWidth=Math.max(1,.22*sc);g.lineCap='round';
+  g.beginPath();g.moveTo(bx,by);g.quadraticCurveTo(bx+h*.04,by-h*.5,bx+h*.02,by-h);g.stroke();
+  var tx=bx+h*.02,ty=by-h;g.strokeStyle=col('#3c5f2a',Z);g.lineWidth=Math.max(1,.12*sc);
+  for(var i=0;i<9;i++){var a=-Math.PI+(i/8)*Math.PI;
+    g.beginPath();g.moveTo(tx,ty);g.quadraticCurveTo(tx+Math.cos(a)*h*.26,ty+Math.sin(a)*h*.26-h*.06,tx+Math.cos(a)*h*.42,ty+Math.sin(a)*h*.3+h*.1);g.stroke();}
+}
+function cartel(g,X,Z,texto,colorTabla){
+  var sc=SC(Z),bx=PX(X,Z),by=PY(Z);
+  g.fillStyle=col('#6b4a2c',Z);g.fillRect(bx-.05*sc-.3*sc,by-1.25*sc,.1*sc,1.25*sc);g.fillRect(bx+.3*sc-.05*sc,by-1.25*sc,.1*sc,1.25*sc);
+  rr(g,bx-.62*sc,by-1.4*sc,1.24*sc,.5*sc,.04*sc);g.fillStyle=col(colorTabla,Z);g.fill();
+  g.lineWidth=Math.max(1,.03*sc);g.strokeStyle=col('#4a3320',Z);g.stroke();
+  g.fillStyle=col('#fff8e4',Z);g.font='700 '+(.18*sc).toFixed(1)+'px system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';
+  g.fillText(texto,bx,by-1.15*sc);
+}
+function dibujarTierra(){
+  var g=bgLand.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,bgLand.width,bgLand.height);
+  aplicarVista(g);
+  var R=rng(20261024);
+  var xa=view.x0-100,xb=view.x1+100,yb=view.y1+80;
+  // monte lejano (capas)
+  for(var capa=0;capa<3;capa++){
+    var Zc=[190,130,85][capa];
+    for(var X=-260;X<260;X+=2.6+R()*3){
+      if(R()<.12){palmera(g,X,Zc+R()*10,(6+R()*3.5));}
+      else arbolMonte(g,X,Zc+R()*14,3.5+R()*3.5,2.2+R()*2.8,capa===0?'#5c7a4a':'#48703a',capa===0?'#6a8a54':'#58804a');
+    }
+  }
+  // suelo
+  var gr=g.createLinearGradient(0,HZ,0,yb);
+  gr.addColorStop(0,col('#9aa56a',200));gr.addColorStop(.3,col('#8d9a55',30));gr.addColorStop(1,col('#6f6a3a',3));
+  g.fillStyle=gr;g.fillRect(xa,HZ+2,xb-xa,yb-HZ);
+  var Zmax=260,Zn=1.15;
+  function bandaX(X0,X1,color,Z0,Z1){g.fillStyle=color;g.beginPath();
+    g.moveTo(PX(X0,Z0),PY(Z0));g.lineTo(PX(X1,Z0),PY(Z0));g.lineTo(PX(X1,Z1),PY(Z1));g.lineTo(PX(X0,Z1),PY(Z1));g.closePath();g.fill()}
+  // lote agroecológico: suelo oscuro con paja
+  bandaX(-420,-2.2,col('#5d4630',30),Zmax,Zn);
+  // lote convencional: rastrojo (siembra directa)
+  bandaX(2.2,420,col('#a99a6c',30),Zmax,Zn);
+  // camino de tierra colorada
+  var cg=g.createLinearGradient(0,HZ,0,yb);cg.addColorStop(0,col('#b86b46',200));cg.addColorStop(.4,col('#a9532f',20));cg.addColorStop(1,col('#8f3f22',2));
+  g.fillStyle=cg;g.beginPath();g.moveTo(PX(-1.9,Zmax),PY(Zmax));g.lineTo(PX(1.9,Zmax),PY(Zmax));g.lineTo(PX(1.9,Zn),PY(Zn));g.lineTo(PX(-1.9,Zn),PY(Zn));g.closePath();g.fill();
+  g.fillStyle=col('#8a3c20',8);[-.75,.75].forEach(function(X){g.beginPath();g.moveTo(PX(X-.13,Zmax),PY(Zmax));g.lineTo(PX(X+.13,Zmax),PY(Zmax));g.lineTo(PX(X+.13,Zn),PY(Zn));g.lineTo(PX(X-.13,Zn),PY(Zn));g.closePath();g.fill();});
+  g.fillStyle=col('#7aa04a',6);[-2.05,2.05].forEach(function(X){g.beginPath();g.moveTo(PX(X-.15,Zmax),PY(Zmax));g.lineTo(PX(X+.15,Zmax),PY(Zmax));g.lineTo(PX(X+.15,Zn),PY(Zn));g.lineTo(PX(X-.15,Zn),PY(Zn));g.closePath();g.fill();});
+
+  // ---- lote convencional: hileras parejas con plantas en línea ----
+  var Rc=rng(77);
+  for(var X=2.9;X<45;X+=.95){
+    var xn=PX(X,4),xf=PX(X,200);
+    if(PX(X-1,2.6)>xb&&xn>xb&&PX(X,30)>xb)continue;
+    // surco (banda verde fina)
+    g.fillStyle=col('#5a8a3c',60);g.beginPath();
+    g.moveTo(PX(X-.22,Zmax),PY(Zmax));g.lineTo(PX(X+.22,Zmax),PY(Zmax));g.lineTo(PX(X+.22,Zn),PY(Zn));g.lineTo(PX(X-.22,Zn),PY(Zn));g.closePath();g.fill();
+    for(var Z=Zn+1.4;Z<150;Z+=Math.max(.34,Z*.05)){
+      var sc=SC(Z),px=PX(X+(Rc()-.5)*.08,Z),py=PY(Z);
+      if(px<xa||px>xb)continue;
+      tuft(g,px,py,.95*sc,col('#4f8a35',Z),col('#7fb04a',Z),Rc);
+    }
+  }
+  // ---- lote agroecológico: franjas diversas ----
+  var Ra=rng(4242);
+  var tipos=['tomate','flor','girasol','aroma','poroto','flor','tomate','aroma'];
+  for(var i=0,X=-2.9;X>-45;X-=1.05,i++){
+    var tipo=tipos[i%tipos.length];
+    // paja entre hileras
+    g.fillStyle=col('#c7a85a',50);g.beginPath();
+    g.moveTo(PX(X-.5,Zmax),PY(Zmax));g.lineTo(PX(X+.5,Zmax),PY(Zmax));g.lineTo(PX(X+.5,Zn),PY(Zn));g.lineTo(PX(X-.5,Zn),PY(Zn));g.closePath();g.fill();
+    g.fillStyle=col('#4a7a38',60);g.beginPath();
+    g.moveTo(PX(X-.2,Zmax),PY(Zmax));g.lineTo(PX(X+.2,Zmax),PY(Zmax));g.lineTo(PX(X+.2,Zn),PY(Zn));g.lineTo(PX(X-.2,Zn),PY(Zn));g.closePath();g.fill();
+    for(var Z=Zn+1.6;Z<110;Z+=Math.max(.42,Z*.055)){
+      var sc=SC(Z),px=PX(X+(Ra()-.5)*.25,Z),py=PY(Z);
+      if(px<xa||px>xb)continue;
+      if(tipo==='tomate'){
+        g.strokeStyle=col('#7a5a30',Z);g.lineWidth=Math.max(1,.03*sc);g.beginPath();g.moveTo(px,py);g.lineTo(px,py-1.25*sc);g.stroke();
+        g.fillStyle=col('#3b7a2b',Z);for(var k=0;k<4;k++){g.beginPath();g.ellipse(px+(Ra()-.5)*.4*sc,py-(.25+k*.25)*sc,.28*sc,.17*sc,(Ra()-.5),0,7);g.fill();}
+        g.fillStyle=col('#cf3a2a',Z);for(var k2=0;k2<3;k2++){g.beginPath();g.arc(px+(Ra()-.5)*.45*sc,py-(.2+Ra()*.7)*sc,Math.max(1,.055*sc),0,7);g.fill();}
+      }else if(tipo==='flor'){
+        g.fillStyle=col('#4a8a30',Z);g.beginPath();g.ellipse(px,py-.12*sc,.3*sc,.14*sc,0,0,7);g.fill();
+        var fc=['#f08a12','#f4b81c','#e3750e','#e7518f'];for(var k3=0;k3<5;k3++){g.fillStyle=col(fc[(k3+i)%4],Z);g.beginPath();g.arc(px+(Ra()-.5)*.5*sc,py-(.1+Ra()*.25)*sc,Math.max(1,.065*sc),0,7);g.fill();}
+      }else if(tipo==='girasol'){
+        if(Ra()<.6){var hh=(1.5+Ra()*.4)*sc;g.strokeStyle=col('#3c7a2a',Z);g.lineWidth=Math.max(1,.05*sc);g.beginPath();g.moveTo(px,py);g.lineTo(px,py-hh);g.stroke();
+          g.fillStyle=col('#f2b705',Z);g.beginPath();g.arc(px,py-hh,.19*sc,0,7);g.fill();g.fillStyle=col('#4a2f17',Z);g.beginPath();g.arc(px,py-hh,.1*sc,0,7);g.fill();
+          g.fillStyle=col('#4a8a30',Z);g.beginPath();g.ellipse(px+.18*sc,py-hh*.5,.2*sc,.07*sc,.4,0,7);g.fill();}
+      }else if(tipo==='aroma'){
+        g.fillStyle=col('#5a7d44',Z);g.beginPath();g.ellipse(px,py-.12*sc,.32*sc,.15*sc,0,0,7);g.fill();
+        g.fillStyle=col('#7d5fb5',Z);for(var k4=0;k4<4;k4++){var lx=px+(k4-1.5)*.1*sc;g.beginPath();g.ellipse(lx,py-(.3+Ra()*.2)*sc,.035*sc,.12*sc,0,0,7);g.fill();}
+      }else{
+        g.fillStyle=col('#6aa83a',Z);for(var k5=0;k5<3;k5++){g.beginPath();g.ellipse(px+(k5-1)*.15*sc,py-.16*sc,.12*sc,.1*sc,0,0,7);g.fill();}
+        g.strokeStyle=col('#8a6b43',Z);g.lineWidth=Math.max(1,.025*sc);g.beginPath();g.moveTo(px,py);g.lineTo(px+.05*sc,py-.9*sc);g.stroke();
+      }
+    }
+  }
+  // composta, colmenas y cartel de cada lote
+  (function(){var Z=7.2,sc=SC(Z),bx=PX(-4.6,Z),by=PY(Z);
+    g.fillStyle=col('#2e1f14',Z);g.beginPath();g.ellipse(bx,by-.2*sc,.8*sc,.34*sc,0,0,7);g.fill();
+    g.fillStyle=col('#8a6b43',Z);g.fillRect(bx-.85*sc,by-.5*sc,.07*sc,.5*sc);g.fillRect(bx+.78*sc,by-.5*sc,.07*sc,.5*sc);
+    [0.12,0.26,0.4].forEach(function(y){g.fillRect(bx-.85*sc,by-y*sc-.02*sc,1.7*sc,.05*sc)});
+    var Zb=9.5,sb=SC(Zb),hx=PX(-6.4,Zb),hy=PY(Zb);
+    [0,1].forEach(function(k){var x=hx+k*.7*sb;g.fillStyle=col('#f0ece0',Zb);g.fillRect(x-.25*sb,hy-.55*sb,.5*sb,.4*sb);g.fillStyle=col('#7d8184',Zb);g.fillRect(x-.29*sb,hy-.6*sb,.58*sb,.06*sb);
+      g.fillStyle=col('#8a6b43',Zb);g.fillRect(x-.2*sb,hy-.15*sb,.05*sb,.15*sb);g.fillRect(x+.15*sb,hy-.15*sb,.05*sb,.15*sb)});
+  })();
+  cartel(g,-5.6,9,'Lote agroecológico','#5a7d3a');
+  cartel(g,5.6,9,'Lote convencional','#7a6a3a');
+  // árboles medianos que enmarcan
+  arbolMonte(g,-10.5,24,6.4,4.2,'#3f7a3a','#58904a');
+  arbolMonte(g,12,24,6.8,4.4,'#3f7a3a','#58904a');
+  palmera(g,-17,32,9);palmera(g,19,36,9.5);palmera(g,-26,48,10);
+  bgListo=true;
+}
+
+/* ================= Nubes, pájaros, tractor (dinámicos) ================= */
+var NUBES=[];(function(){var R=rng(5);for(var i=0;i<9;i++)NUBES.push({x:-400+R()*2600,y:80+R()*250,w:160+R()*260,v:3+R()*5,a:.5+R()*.4})})();
+var AVES=[];(function(){var R=rng(11);for(var i=0;i<7;i++)AVES.push({x:200+R()*1200,y:230+R()*110,v:14+R()*10,f:R()*6})})();
+var tractor={x:20,dir:1};
+function dibujarNubes(g,t){
+  NUBES.forEach(function(n){
+    var x=((n.x+t*n.v)%2800)-500;
+    var g1=g;g1.fillStyle=css(T.nube,n.a*.85);
+    for(var k=0;k<5;k++){g1.beginPath();g1.ellipse(x+k*n.w*.2,n.y+Math.sin(k*1.7)*10,n.w*.24,n.w*.06,0,0,7);g1.fill();}
+    g1.fillStyle=css(T.nubeSombra,n.a*.35);g1.beginPath();g1.ellipse(x+n.w*.4,n.y+12,n.w*.5,n.w*.035,0,0,7);g1.fill();
+  });
+}
+function dibujarAves(g,t){
+  if(!T.pajaros)return;g.strokeStyle='rgba(40,34,30,.75)';g.lineWidth=1.6;g.lineCap='round';
+  AVES.forEach(function(a){var x=((a.x+t*a.v)%2200)-300,y=a.y+Math.sin(t*.6+a.f)*14,w=Math.sin(t*7+a.f)*5;
+    g.beginPath();g.moveTo(x-9,y+w);g.quadraticCurveTo(x-4,y-5,x,y);g.quadraticCurveTo(x+4,y-5,x+9,y+w);g.stroke();});
+}
+function dibujarTractor(g,t){
+  var Z=45,sc=SC(Z),by=PY(Z);
+  if(!reduce){tractor.x+=tractor.dir*.03;if(tractor.x>45)tractor.dir=-1;if(tractor.x<15)tractor.dir=1}
+  var bx=PX(tractor.x,Z),d=tractor.dir;
+  g.save();g.translate(bx,by);g.scale(d,1);
+  // polvo
+  if(!reduce){for(var i=0;i<5;i++){var ph=(t*.7+i*.2)%1;g.fillStyle='rgba(190,150,110,'+(.28*(1-ph))+')';g.beginPath();g.arc(-1.7*sc-ph*1.4*sc,-.15*sc-ph*.5*sc,(.18+ph*.4)*sc,0,7);g.fill();}}
+  g.fillStyle=lit('#4f8a35');rr(g,-1.1*sc,-1.35*sc,1.9*sc,.7*sc,.08*sc);g.fill();
+  g.fillStyle=lit('#3e6e2a');g.fillRect(-.3*sc,-2.15*sc,.9*sc,.85*sc);
+  g.fillStyle='rgba(180,220,235,.8)';g.fillRect(-.2*sc,-2.05*sc,.7*sc,.5*sc);
+  g.fillStyle=lit('#2b2b2b');g.beginPath();g.arc(-.5*sc,-.55*sc,.55*sc,0,7);g.fill();g.beginPath();g.arc(.85*sc,-.35*sc,.35*sc,0,7);g.fill();
+  g.fillStyle=lit('#d6b64a');g.beginPath();g.arc(-.5*sc,-.55*sc,.22*sc,0,7);g.fill();g.beginPath();g.arc(.85*sc,-.35*sc,.14*sc,0,7);g.fill();
+  g.fillStyle=lit('#9a3a2a');g.fillRect(-2.6*sc,-1.1*sc,1.3*sc,.28*sc);
+  g.fillStyle=lit('#2b2b2b');g.beginPath();g.arc(-2.3*sc,-.35*sc,.28*sc,0,7);g.fill();
+  g.restore();
+}
+
+/* ================= Personajes ================= */
+var VIS={a:{o:1,w:.95},e:{o:.45,w:1.35},i:{o:.22,w:1.45},o:{o:.62,w:.6},u:{o:.28,w:.42},m:{o:0,w:1},f:{o:.12,w:1.1},c:{o:.16,w:1.05}};
+function visDe(ch){var c=ch.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  if(c==='a')return'a';if(c==='e')return'e';if(c==='i'||c==='y')return'i';if(c==='o')return'o';if(c==='u'||c==='w')return'u';
+  if(c==='m'||c==='b'||c==='p')return'm';if(c==='f'||c==='v')return'f';if(/[a-z]/.test(c))return'c';return null}
+function lineaTiempo(texto,chMs){var items=[],starts=[],t=0;
+  for(var i=0;i<texto.length;i++){var ch=texto.charAt(i),v=visDe(ch),d;starts.push(t);
+    if(v){d=('aeiou'.indexOf(v)>=0)?chMs*1.25:chMs*.8;items.push({s:t,e:t+d,v:v})}
+    else if(/[.?!]/.test(ch))d=chMs*5;else if(/[,;:]/.test(ch))d=chMs*3;else d=chMs*.7;t+=d}
+  return{items:items,starts:starts,total:t}}
+
+var POSES={rest:[.1,.18],palm:[.75,1.45],point:[1.05,1.3],chest:[.35,-2.35],wide:[1.35,1.1],raise:[.95,2.4]};
+var GESTOS=['palm','point','chest','wide','palm','raise'];
+
+function nuevaPersona(id,x){return{id:id,x:x,y:PY(4.3),inner:id==='david'?1:-1,
+  mouth:{o:0,w:1},tl:null,t0:0,hablando:false,pose:[.1,.18],gesto:'rest',proximoGesto:0,gi:id==='david'?0:3,blink:0,proxParp:2+Math.random()*2,
+  pts:0,ceja:0,energia:0,holo:0,tilt:0,vivo:false}}
+var P={david:nuevaPersona('david',556),tecno:nuevaPersona('tecno',1044)};
+
+function limb(g,sx,sy,p1,p2,dir,L1,L2,w,color){
+  var ex=sx+dir*Math.sin(p1)*L1,ey=sy+Math.cos(p1)*L1,hx=ex+dir*Math.sin(p2)*L2,hy=ey+Math.cos(p2)*L2;
+  g.lineCap='round';g.lineJoin='round';g.strokeStyle=color;g.lineWidth=w;
+  g.beginPath();g.moveTo(sx,sy);g.lineTo(ex,ey);g.lineTo(hx,hy);g.stroke();
+  return{ex:ex,ey:ey,hx:hx,hy:hy};
+}
+function elipse(g,x,y,rx,ry,fill,rot){g.fillStyle=fill;g.beginPath();g.ellipse(x,y,rx,ry,rot||0,0,7);g.fill()}
+
+function sombraSuelo(g,p){
+  var S=T.sombra;g.save();g.translate(p.x,p.y+4);
+  var L=170*S.len;g.fillStyle='rgba(30,20,10,.28)';
+  g.beginPath();g.ellipse(S.dx*L*.45,2,48+L*.5,11+S.len*3,S.dx*-.12,0,7);g.fill();
+  g.restore();
+}
+
+function dibujarPersona(g,p,t){
+  var esD=p.id==='david',inn=p.inner,out=-inn;
+  var resp=Math.sin(t*1.7+(esD?0:1.3))*1.3;
+  g.save();g.translate(p.x,p.y);
+  var skin=lit(esD?'#b67d58':'#d8a07a'),skinD=lit(esD?'#9d6a48':'#c08868');
+  // --- piernas y botas ---
+  var pant=lit(esD?'#6d6a48':'#4d6c96');
+  g.fillStyle=pant;rr(g,-40,-152,36,130,10);g.fill();rr(g,4,-152,36,130,10);g.fill();
+  if(!esD){ // parches y desgaste
+    g.fillStyle=lit('#7a8aa0');rr(g,-30,-92,18,14,3);g.fill();g.fillStyle='rgba(255,255,255,.18)';g.fillRect(14,-70,12,3);g.fillRect(-26,-50,12,2);
+    g.fillStyle=lit('#cbb27d');g.fillRect(-40,-34,36,6);g.fillRect(4,-34,36,6);
+  }
+  var bota=lit(esD?'#4a3322':'#6a4a30');
+  g.fillStyle=bota;rr(g,-46,-26,46,26,8);g.fill();rr(g,2,-26,46,26,8);g.fill();
+  // --- brazo exterior (ítem) ---
+  var lo=limb(g,out*50,-282+resp,.1,.22,out,60,58,24,lit(esD?'#8b8458':'#8b6b43'));
+  // --- torso ---
+  var camisa=lit(esD?'#8b8458':'#8b6b43');
+  g.fillStyle=camisa;g.beginPath();
+  g.moveTo(-52,-286+resp);g.quadraticCurveTo(0,-302+resp,52,-286+resp);g.lineTo(58,-150);g.lineTo(-58,-150);g.closePath();g.fill();
+  if(esD){
+    // delantal
+    g.fillStyle=lit('#cbb58c');g.beginPath();g.moveTo(-34,-272+resp);g.lineTo(34,-272+resp);g.lineTo(46,-96);g.lineTo(-46,-96);g.closePath();g.fill();
+    g.strokeStyle=lit('#5a3d22');g.lineWidth=7;g.lineCap='round';
+    g.beginPath();g.moveTo(-30,-292+resp);g.lineTo(-26,-266+resp);g.moveTo(30,-292+resp);g.lineTo(26,-266+resp);g.stroke();
+    g.fillStyle=lit('#5a3d22');g.fillRect(-58,-158,116,12);g.fillStyle=lit('#c9a34a');g.fillRect(-7,-157,14,10);
+    g.fillStyle=lit('#e8a33a');g.beginPath();g.arc(0,-232+resp,18,0,7);g.fill();g.fillStyle=lit('#f4ead0');g.beginPath();g.arc(0,-232+resp,15,0,7);g.fill();
+    g.fillStyle=lit('#3f7a2a');g.beginPath();g.moveTo(0,-218+resp);g.bezierCurveTo(-14,-220,-14,-238,-5,-240);g.bezierCurveTo(-2,-232,-1,-226,0,-218);g.fill();
+    g.beginPath();g.moveTo(0,-218+resp);g.bezierCurveTo(14,-220,14,-238,5,-240);g.bezierCurveTo(2,-232,1,-226,0,-218);g.fill();
+    g.fillStyle=lit('#bfa77c');rr(g,10,-146,32,34,3);g.fill();g.fillStyle='#2b2218';g.font='700 13px Georgia,serif';g.textAlign='center';g.textBaseline='middle';g.fillText('Gaia',26,-129);
+    g.fillStyle=lit('#8a8f92');g.fillRect(20,-152,3,12);g.fillStyle=lit('#3f7a2a');g.fillRect(28,-152,3,10);
+  }else{
+    // camisa a rayas + overol + campera abierta
+    g.save();rr(g,-24,-292+resp,48,60,6);g.clip();
+    for(var yy=-292;yy<-232;yy+=8){g.fillStyle=((yy+292)/8)%2===0?'#1d1d1f':lit('#e8dcc0');g.fillRect(-24,yy+resp,48,8)}g.restore();
+    g.fillStyle=lit('#4c6f9e');g.beginPath();g.moveTo(-24,-238+resp);g.lineTo(24,-238+resp);g.lineTo(28,-150);g.lineTo(-28,-150);g.closePath();g.fill();
+    g.fillStyle=lit('#3d5a82');rr(g,-14,-222+resp,28,22,3);g.fill();
+    g.strokeStyle=lit('#c9a34a');g.lineWidth=2;g.beginPath();g.moveTo(-6,-226+resp);g.lineTo(-6,-208+resp);g.moveTo(2,-228+resp);g.lineTo(2,-208+resp);g.stroke();
+    g.fillStyle=lit('#5a3d22');g.fillRect(-58,-158,116,11);g.fillStyle=lit('#c9a34a');g.fillRect(-7,-157,14,9);
+    // solapas de la campera
+    g.fillStyle=lit('#7a5c38');g.beginPath();g.moveTo(-24,-292+resp);g.lineTo(-34,-250+resp);g.lineTo(-30,-150);g.lineTo(-46,-150);g.lineTo(-52,-286+resp);g.closePath();g.fill();
+    g.beginPath();g.moveTo(24,-292+resp);g.lineTo(34,-250+resp);g.lineTo(30,-150);g.lineTo(46,-150);g.lineTo(52,-286+resp);g.closePath();g.fill();
+    // detalles luminosos cian
+    g.save();g.strokeStyle='#45e8ff';g.shadowColor='#45e8ff';g.shadowBlur=10;g.lineWidth=2.4;g.lineCap='round';
+    g.beginPath();g.moveTo(-50,-280+resp);g.lineTo(-40,-262+resp);g.lineTo(-40,-226+resp);g.lineTo(-48,-212+resp);
+    g.moveTo(50,-280+resp);g.lineTo(40,-262+resp);g.lineTo(40,-226+resp);g.lineTo(48,-212+resp);
+    g.moveTo(-52,-176);g.lineTo(-44,-176);g.moveTo(44,-176);g.lineTo(52,-176);g.stroke();g.restore();
+  }
+  // ítem del brazo exterior
+  if(esD){
+    var bx=lo.hx,by=lo.hy+4;
+    g.strokeStyle=lit('#b88a4e');g.lineWidth=4;g.beginPath();g.arc(bx,by+4,26,Math.PI*1.1,Math.PI*1.9);g.stroke();
+    g.fillStyle=lit('#b88a4e');g.beginPath();g.moveTo(bx-32,by+6);g.lineTo(bx+32,by+6);g.lineTo(bx+24,by+46);g.lineTo(bx-24,by+46);g.closePath();g.fill();
+    g.strokeStyle=lit('#946a36');g.lineWidth=1.5;for(var k=-2;k<=2;k++){g.beginPath();g.moveTo(bx+k*10,by+8);g.lineTo(bx+k*8,by+45);g.stroke();}
+    var tm=['#cf3a2a','#cf3a2a','#e9792a','#cf3a2a','#cf3a2a'];tm.forEach(function(c,i){g.fillStyle=lit(c);g.beginPath();g.arc(bx-20+i*10,by+2-(i%2)*5,9,0,7);g.fill()});
+    [['#f0b52a',-14],['#e7518f',8],['#9a6bd1',22]].forEach(function(f){g.fillStyle=lit(f[0]);g.beginPath();g.arc(bx+f[1],by-8,6,0,7);g.fill()});
+    g.fillStyle=skin;g.beginPath();g.arc(lo.hx,lo.hy+2,12,0,7);g.fill();
+  }else{
+    g.fillStyle=lit('#6a4a30');g.fillRect(lo.hx-4,lo.hy+4,8,24);
+    g.fillStyle=lit('#aeb3b6');g.beginPath();g.moveTo(lo.hx-11,lo.hy+28);g.lineTo(lo.hx+11,lo.hy+28);g.lineTo(lo.hx+4,lo.hy+62);g.lineTo(lo.hx-4,lo.hy+62);g.closePath();g.fill();
+    g.fillStyle=lit('#6b4a30');g.beginPath();g.arc(lo.hx,lo.hy+2,13,0,7);g.fill();
+  }
+  // --- brazo interior (gesto) ---
+  var ps=p.pose;
+  var li=limb(g,inn*50,-282+resp,ps[0],ps[1],inn,60,58,24,esD?lit('#8b8458'):lit('#8b6b43'));
+  if(esD){g.fillStyle=skin;g.beginPath();g.arc(li.hx,li.hy+2,12,0,7);g.fill()}
+  else{
+    g.save();g.fillStyle=lit('#6b4a30');g.beginPath();g.arc(li.hx,li.hy+2,13,0,7);g.fill();
+    g.shadowColor='#45e8ff';g.shadowBlur=12;g.strokeStyle='#45e8ff';g.lineWidth=2.2;g.beginPath();g.arc(li.hx,li.hy+2,13,.2,Math.PI*.9);g.stroke();g.restore();
+    if(p.holo>.02)holograma(g,li.hx,li.hy,inn,p.holo,t);
+  }
+  // --- cuello y cabeza ---
+  g.fillStyle=skinD;g.fillRect(-14,-312+resp,28,26);
+  g.save();g.translate(0,-300+resp);g.rotate(p.tilt);g.translate(0,300-resp);
+  var hy=-338+resp;
+  elipse(g,-37,hy+4,6,11,skinD);elipse(g,37,hy+4,6,11,skinD);
+  elipse(g,0,hy,37,46,skin);
+  if(esD){
+    // pelo oscuro con mechón gris y barba gris
+    g.fillStyle=lit('#2f2c2a');g.beginPath();g.moveTo(-38,hy-6);g.quadraticCurveTo(-40,hy-52,0,hy-50);g.quadraticCurveTo(40,hy-52,38,hy-6);g.quadraticCurveTo(30,hy-28,0,hy-30);g.quadraticCurveTo(-30,hy-28,-38,hy-6);g.fill();
+    g.fillStyle=lit('#77736e');g.beginPath();g.ellipse(12,hy-42,16,5,.2,0,7);g.fill();g.beginPath();g.ellipse(-37,hy-10,5,14,0,0,7);g.fill();g.beginPath();g.ellipse(37,hy-10,5,14,0,0,7);g.fill();
+    g.fillStyle=lit('#8f8a84');g.beginPath();g.moveTo(-37,hy+4);g.quadraticCurveTo(-34,hy+46,0,hy+50);g.quadraticCurveTo(34,hy+46,37,hy+4);g.quadraticCurveTo(26,hy+12,0,hy+14);g.quadraticCurveTo(-26,hy+12,-37,hy+4);g.fill();
+  }else{
+    g.fillStyle='rgba(70,45,30,.22)';g.beginPath();g.moveTo(-36,hy+6);g.quadraticCurveTo(-30,hy+44,0,hy+46);g.quadraticCurveTo(30,hy+44,36,hy+6);g.quadraticCurveTo(24,hy+16,0,hy+17);g.quadraticCurveTo(-24,hy+16,-36,hy+6);g.fill();
+    // gorro
+    g.fillStyle=lit('#2d2d31');g.beginPath();g.moveTo(-40,hy-14);g.quadraticCurveTo(-44,hy-62,0,hy-64);g.quadraticCurveTo(44,hy-62,40,hy-14);g.quadraticCurveTo(0,hy-26,-40,hy-14);g.fill();
+    g.fillStyle=lit('#3b3b40');g.beginPath();g.moveTo(-41,hy-16);g.quadraticCurveTo(0,hy-28,41,hy-16);g.lineTo(40,hy-4);g.quadraticCurveTo(0,hy-16,-40,hy-4);g.closePath();g.fill();
+    g.strokeStyle='rgba(255,255,255,.08)';g.lineWidth=1.5;for(var r=-30;r<=30;r+=8){g.beginPath();g.moveTo(r,hy-58);g.lineTo(r*1.03,hy-8);g.stroke()}
+  }
+  // cejas
+  var cj=p.ceja*4;g.strokeStyle=esD?'#34322f':'#4a3a2c';g.lineWidth=3.4;g.lineCap='round';
+  g.beginPath();g.moveTo(-23,hy-12-cj);g.lineTo(-8,hy-14-cj);g.moveTo(8,hy-14-cj);g.lineTo(23,hy-12-cj);g.stroke();
+  // ojos
+  var ap=Math.max(.08,1-Math.sin(Math.min(1,p.blink)*Math.PI)*.95);
+  var mirarX=p.hablando?0:inn*2.6;
+  for(var s=-1;s<=1;s+=2){
+    var ex=s*15,ey=hy-2;
+    g.fillStyle='#f3efe6';g.beginPath();g.ellipse(ex,ey,8.5,6.4*ap,0,0,7);g.fill();
+    g.fillStyle=esD?'#4a2c17':'#3a5a6a';g.beginPath();g.ellipse(ex+mirarX,ey,4,4*ap,0,0,7);g.fill();
+    g.fillStyle='#0b0806';g.beginPath();g.ellipse(ex+mirarX,ey,2,2*ap,0,0,7);g.fill();
+  }
+  // nariz
+  g.strokeStyle=esD?'rgba(120,70,45,.7)':'rgba(150,100,75,.7)';g.lineWidth=2.4;g.beginPath();g.moveTo(-1,hy+4);g.quadraticCurveTo(-7,hy+16,0,hy+17);g.quadraticCurveTo(6,hy+16,2,hy+4);g.stroke();
+  // bigote (David)
+  if(esD){g.fillStyle=lit('#7b7772');g.beginPath();g.ellipse(0,hy+24,16,4.2,0,0,7);g.fill()}
+  // boca
+  var o=p.mouth.o,mw=14*p.mouth.w,my=hy+31;
+  if(o<.09){
+    g.strokeStyle=esD?'#8a4e44':'#9a5a50';g.lineWidth=3;g.beginPath();g.moveTo(-mw,my);g.quadraticCurveTo(0,my+4+(p.hablando?0:2),mw,my);g.stroke();
+  }else{
+    g.fillStyle='#3a1512';g.beginPath();g.ellipse(0,my+o*3,mw,2.5+o*9,0,0,7);g.fill();
+    if(o>.14){g.fillStyle='#f2eee4';g.beginPath();g.ellipse(0,my+o*3-(2.5+o*9)*.55,mw*.78,2.2,0,0,7);g.fill()}
+    g.strokeStyle=esD?'#8a4e44':'#9a5a50';g.lineWidth=2.4;g.beginPath();g.ellipse(0,my+o*3,mw+1,3+o*9,0,0,7);g.stroke();
+  }
+  g.restore(); // cabeza
+  g.restore();
+}
+
+function holograma(g,hx,hy,inn,a,t){
+  var cx=hx+inn*46,cy=hy-86+Math.sin(t*2)*3;
+  g.save();g.globalAlpha=a;
+  g.strokeStyle='rgba(120,240,255,.7)';g.lineWidth=1.2;g.setLineDash([3,4]);g.beginPath();g.moveTo(hx,hy-8);g.lineTo(cx-inn*20,cy+44);g.stroke();g.setLineDash([]);
+  g.shadowColor='#45e8ff';g.shadowBlur=14;
+  g.fillStyle='rgba(40,200,230,.16)';rr(g,cx-62,cy-44,124,88,10);g.fill();g.strokeStyle='rgba(120,240,255,.95)';g.lineWidth=1.6;g.stroke();
+  g.shadowBlur=6;g.lineWidth=1.7;g.lineCap='round';g.strokeStyle='rgba(150,245,255,.98)';
+  // hoja
+  g.beginPath();g.ellipse(cx-28,cy-18,9,15,-.6,0,7);g.stroke();g.beginPath();g.moveTo(cx-34,cy-8);g.lineTo(cx-22,cy-28);g.stroke();
+  // tractor
+  g.strokeRect(cx+14,cy-24,24,10);g.strokeRect(cx+18,cy-34,10,10);g.beginPath();g.arc(cx+18,cy-10,7,0,7);g.stroke();g.beginPath();g.arc(cx+36,cy-8,4,0,7);g.stroke();
+  // trigo
+  g.beginPath();g.moveTo(cx-28,cy+36);g.lineTo(cx-28,cy+8);g.stroke();for(var k=0;k<3;k++){g.beginPath();g.ellipse(cx-34,cy+14+k*8,3,5,-.6,0,7);g.stroke();g.beginPath();g.ellipse(cx-22,cy+14+k*8,3,5,.6,0,7);g.stroke();}
+  // gota
+  g.beginPath();g.moveTo(cx+26,cy+8);g.quadraticCurveTo(cx+38,cy+24,cx+26,cy+34);g.quadraticCurveTo(cx+14,cy+24,cx+26,cy+8);g.stroke();
+  g.restore();
+}
+
+function etiqueta(g,p,t,activo){
+  var esD=p.id==='david',txt=(view.w<600?(esD?'David':'Tecno'):(esD?'David · Agroecología':'Tecno · Agricultura convencional'))+(estado.modo==='debate'||$('voto').hidden===false?'  ·  '+p.pts:'');
+  g.save();g.font='700 17px system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';
+  var w=g.measureText(txt).width+28,x=p.x,y=p.y-418-(activo?4:0);
+  rr(g,x-w/2,y-16,w,32,16);
+  g.fillStyle=activo?'rgba(255,250,232,.97)':'rgba(255,250,232,.80)';g.fill();
+  g.lineWidth=activo?3.5:1.5;g.strokeStyle=esD?'#3f6b2a':'#1b8fa6';g.stroke();
+  g.fillStyle='#2b2218';g.fillText(txt,x,y+1);
+  if(activo){for(var i=0;i<3;i++){g.fillStyle=esD?'#3f6b2a':'#1b8fa6';g.beginPath();g.arc(x-10+i*10,y+26+Math.sin(t*8+i)*3,3.2,0,7);g.fill()}}
+  g.restore();
+}
+
+/* ================= Voz del navegador y debate ================= */
+var vocesEs=[];
+function cargarVoces(){if(!window.speechSynthesis)return;var l=speechSynthesis.getVoices()||[];
+  vocesEs=l.filter(function(v){return /^es/i.test(v.lang.replace('_','-'))});
+  var pr=function(v){var L=v.lang.replace('_','-');return /^es-AR/i.test(L)?0:/^es-(US|MX|419|CO|CL|UY)/i.test(L)?1:2};
+  vocesEs.sort(function(a,b){return pr(a)-pr(b)})}
+cargarVoces();if(window.speechSynthesis)speechSynthesis.onvoiceschanged=cargarVoces;
+
+var estado={modo:'idle',i:-1,token:0,watch:0};
+var live=null,liveWho=null;
+function setEstado(t){$('estado').textContent=t||''}
+function tags(tag){var e=$('capTag');if(!tag){e.hidden=true;return}var d=TAGS[tag];e.textContent=d.t;e.className='badge '+d.c;e.hidden=false}
+function mostrar(who,tag,texto){var e=$('sr');if(e)e.textContent=(who==='david'?'David: ':'Tecno: ')+texto}
+function silenciar(){
+  if(window.speechSynthesis)try{speechSynthesis.cancel()}catch(e){}
+  ['david','tecno'].forEach(function(k){P[k].tl=null;P[k].hablando=false});
+}
+function hablar(who,texto,alTerminar){
+  var p=P[who],token=++estado.token;silenciar();
+  var palabras=texto.split(/\s+/).length,durSilencio=Math.max(2800,palabras*390);
+  var datos=null,iniciado=false,terminado=false;
+  function fin(){if(terminado||token!==estado.token)return;terminado=true;clearTimeout(estado.watch);p.tl=null;p.hablando=false;alTerminar&&alTerminar()}
+  function ir(chMs){if(iniciado||token!==estado.token)return;iniciado=true;datos=lineaTiempo(texto,chMs);p.tl={items:datos.items,idx:0,total:datos.total,starts:datos.starts};p.t0=performance.now();p.hablando=true}
+  var voz=null;
+  if(vocesEs.length){voz=who==='tecno'&&vocesEs.length>1?vocesEs[1]:vocesEs[0]}
+  if(window.speechSynthesis&&window.SpeechSynthesisUtterance&&voz){
+    var u=new SpeechSynthesisUtterance(texto);u.voice=voz;u.lang=voz.lang;u.rate=who==='tecno'?1.04:.96;u.pitch=who==='tecno'?.78:1.02;
+    u.onstart=function(){ir(64)};
+    u.onboundary=function(ev){if(token!==estado.token)return;if(!iniciado)ir(64);if(p.tl&&typeof ev.charIndex==='number'&&p.tl.starts[ev.charIndex]!=null)p.t0=performance.now()-p.tl.starts[ev.charIndex]};
+    u.onend=function(){setTimeout(fin,350)};u.onerror=function(){setTimeout(fin,200)};
+    speechSynthesis.speak(u);setTimeout(function(){ir(64)},1200);
+    estado.watch=setTimeout(fin,Math.max(12000,durSilencio*2.2));
+    setEstado('Voz del dispositivo ('+voz.lang+').'+(vocesEs.length<2?' Este dispositivo tiene una sola voz en español: David y Tecno se distinguen por el tono.':''));
+  }else{
+    ir(durSilencio/(texto.length*1.1));
+    estado.watch=setTimeout(fin,durSilencio);
+    setEstado('Este dispositivo no tiene voz en español, así que el debate no se puede escuchar acá. Probá en otro navegador o hablá con cada uno por micrófono.');
+  }
+}
+function jugarTurno(i){
+  if(estado.modo!=='debate')return;
+  if(i>=GUION.length){terminarDebate(true);return}
+  estado.i=i;var t=GUION[i];mostrar(t.w,null,t.t);if(t.pt)P[t.pt].pts++;
+  $('prog').textContent='Turno '+(i+1)+' de '+GUION.length;
+  hablar(t.w,t.t,function(){if(estado.modo==='debate')setTimeout(function(){jugarTurno(i+1)},450)});
+}
+function iniciarDebate(){
+  terminarLive();estado.modo='debate';silenciar();P.david.pts=0;P.tecno.pts=0;$('voto').hidden=true;
+  $('bDebate').textContent='■ Detener el debate';$('bDebate').classList.add('on');
+  jugarTurno(0);
+}
+function terminarDebate(completo){
+  var estabaDebate=estado.modo==='debate';
+  estado.modo='idle';estado.token++;clearTimeout(estado.watch);silenciar();
+  $('bDebate').textContent='▶ Ver el debate';$('bDebate').classList.remove('on');
+  $('prog').textContent='';
+  if(completo){setEstado('Fin del debate: '+P.david.pts+' a '+P.tecno.pts+' en puntos concedidos.');$('voto').hidden=false}
+  else if(estabaDebate){setEstado('')}
+}
+
+/* ================= Conversación en vivo (ElevenLabs) ================= */
+function marcarLive(who,on){
+  ['david','tecno'].forEach(function(k){var b=$(k==='david'?'bDavid':'bTecno');
+    var activo=on&&who===k;b.classList.toggle('on',activo);
+    b.textContent=activo?('Terminar con '+(k==='david'?'David':'Tecno')):('Hablar con '+(k==='david'?'David':'Tecno'))});
+}
+function terminarLive(){
+  if(live){try{live.endSession()}catch(e){}}
+  live=null;if(liveWho){P[liveWho].vivo=false;P[liveWho].hablando=false}liveWho=null;marcarLive(null,false);
+  ['david','tecno'].forEach(function(k){P[k].tl=null});
+}
+async function iniciarLive(who){
+  if(live&&liveWho===who){terminarLive();setEstado('Charla terminada.');return}
+  terminarDebate(false);terminarLive();
+  var btn=$(who==='david'?'bDavid':'bTecno');btn.disabled=true;
+  setEstado('Conectando con '+(who==='david'?'David':'Tecno')+'…');
+  try{
+    var mod;
+    try{mod=await import('https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm')}
+    catch(e1){mod=await import('https://esm.sh/@elevenlabs/client@1.26.0')}
+    await navigator.mediaDevices.getUserMedia({audio:true});
+    liveWho=who;P[who].vivo=true;
+    var nombre=who==='david'?'David':'Tecno';
+    live=await mod.Conversation.startSession({
+      agentId:AGENTES[who],connectionType:'websocket',
+      onConnect:function(){setEstado('Conectado con '+nombre+'. Hablale con el micrófono.');mostrar(who,null,'Hablale con el micrófono.')},
+      onDisconnect:function(){if(liveWho===who){live=null;P[who].vivo=false;P[who].hablando=false;liveWho=null;marcarLive(null,false);setEstado('Charla terminada.')}},
+      onError:function(m){console.error(m);setEstado('Error de conexión con el agente.')},
+      onMessage:function(m){if(m&&m.message)mostrar(m.source==='user'?'tecno':who,null,m.message)},
+      onModeChange:function(m){var hablandoAhora=m&&m.mode==='speaking';P[who].hablando=hablandoAhora;if(!hablandoAhora)P[who].tl=null}
+    });
+    marcarLive(who,true);
+  }catch(e){
+    console.error(e);live=null;if(liveWho){P[liveWho].vivo=false}liveWho=null;marcarLive(null,false);
+    setEstado('No se pudo iniciar la charla por voz. Necesita micrófono, conexión a internet y que la página esté publicada con https (por ejemplo en GitHub Pages).');
+  }
+  btn.disabled=false;
+}
+
+/* ================= Animación ================= */
+function actualizarPersona(p,dt,t,otro){
+  // boca
+  var objetivo={o:0,w:1};
+  if(p.tl){
+    var tt=performance.now()-p.t0,its=p.tl.items;
+    while(p.tl.idx<its.length&&its[p.tl.idx].e<tt)p.tl.idx++;
+    if(p.tl.idx<its.length&&tt>=its[p.tl.idx].s){var v=VIS[its[p.tl.idx].v];objetivo={o:v.o,w:v.w}}
+  }else if(p.vivo&&p.hablando&&live&&live.getOutputVolume){
+    var vol=live.getOutputVolume()||0;objetivo={o:Math.min(1,vol*2.6),w:.8+Math.min(.6,vol)};
+  }
+  var k=1-Math.exp(-dt*(objetivo.o<p.mouth.o?24:32));
+  p.mouth.o+=(objetivo.o-p.mouth.o)*k;p.mouth.w+=(objetivo.w-p.mouth.w)*k;
+  p.energia+=((p.hablando?.35+p.mouth.o*.65:0)-p.energia)*(1-Math.exp(-dt*6));
+  // gestos
+  if(p.hablando&&!reduce){p.proximoGesto-=dt;if(p.proximoGesto<=0){p.gesto=GESTOS[p.gi++%GESTOS.length];p.proximoGesto=1.5+Math.random()*2;p.ceja=1}}
+  else if(!p.hablando){p.gesto='rest'}
+  var tp=POSES[p.gesto],ks=1-Math.exp(-dt*4.5),amp=p.hablando?.6+p.energia*.5:1;
+  var base=POSES.rest;
+  p.pose[0]+=((base[0]+(tp[0]-base[0])*Math.min(1,amp))-p.pose[0])*ks;
+  p.pose[1]+=((base[1]+(tp[1]-base[1])*Math.min(1,amp))-p.pose[1])*ks;
+  p.ceja=Math.max(0,p.ceja-dt*2);
+  var holoObj=(p.id==='tecno'&&p.hablando&&(p.gesto==='palm'||p.gesto==='wide'||p.gesto==='raise'))?1:0;
+  p.holo+=(holoObj-p.holo)*(1-Math.exp(-dt*5));
+  // parpadeo y cabeza
+  p.proxParp-=dt;if(p.proxParp<=0){p.blink=1;p.proxParp=2+Math.random()*3.5}
+  if(p.blink>0)p.blink=Math.max(0,p.blink-dt*7);
+  var escucha=otro.hablando&&!p.hablando;
+  var tiltObj=(escucha?p.inner*.05:0)+(p.hablando?Math.sin(t*3.1)*.03*p.energia:0);
+  p.tilt+=(tiltObj-p.tilt)*(1-Math.exp(-dt*5));
+}
+
+var reloj=performance.now(),tAcum=0;
+function bucle(now){
+  var dt=Math.min(.05,(now-reloj)/1000);reloj=now;tAcum+=dt;
+  if(!bgListo){T=HORAS[horaActual];T.hazeC=hex(T.haze);dibujarCielo();dibujarTierra()}
+  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.drawImage(bgSky,0,0);
+  aplicarVista(ctx);if(!reduce||true){dibujarNubes(ctx,reduce?0:tAcum)}
+  ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(bgLand,0,0);
+  aplicarVista(ctx);
+  dibujarAves(ctx,reduce?0:tAcum);
+  dibujarTractor(ctx,tAcum);
+  actualizarPersona(P.david,dt,tAcum,P.tecno);actualizarPersona(P.tecno,dt,tAcum,P.david);
+  sombraSuelo(ctx,P.david);sombraSuelo(ctx,P.tecno);
+  dibujarPersona(ctx,P.david,tAcum);dibujarPersona(ctx,P.tecno,tAcum);
+  etiqueta(ctx,P.david,tAcum,P.david.hablando);etiqueta(ctx,P.tecno,tAcum,P.tecno.hablando);
+  // gradación de color y viñeta
+  ctx.setTransform(view.dpr,0,0,view.dpr,0,0);
+  ctx.fillStyle=T.tinte;ctx.fillRect(0,0,view.w,view.h);
+  var vg=ctx.createRadialGradient(view.w/2,view.h*.45,Math.min(view.w,view.h)*.35,view.w/2,view.h*.5,Math.max(view.w,view.h)*.8);
+  vg.addColorStop(0,'rgba(20,10,0,0)');vg.addColorStop(1,'rgba(20,10,0,'+T.viñeta+')');ctx.fillStyle=vg;ctx.fillRect(0,0,view.w,view.h);
+  requestAnimationFrame(bucle);
+}
+
+/* ================= Eventos ================= */
+document.querySelectorAll('#horas button').forEach(function(b){
+  b.addEventListener('click',function(){
+    horaActual=b.getAttribute('data-h');
+    document.querySelectorAll('#horas button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+    bgListo=false;
+  });
+});
+document.querySelectorAll('#horas button').forEach(function(x){x.setAttribute('aria-pressed',x.getAttribute('data-h')===horaActual?'true':'false')});
+$('bDebate').addEventListener('click',function(){if(estado.modo==='debate'){terminarDebate(false)}else{iniciarDebate()}});
+$('bDavid').addEventListener('click',function(){iniciarLive('david')});
+$('bTecno').addEventListener('click',function(){iniciarLive('tecno')});
+['vD','vT','vE'].forEach(function(id){$(id).addEventListener('click',function(){var m={vD:'David',vT:'Tecno',vE:'Empate'}[id];$('voto').hidden=true;setEstado('Tu voto: '+m+'. Gracias por participar.')})});
+window.addEventListener('resize',resize);
+if(window.ResizeObserver)new ResizeObserver(function(){resize()}).observe($('panel'));
+document.addEventListener('visibilitychange',function(){if(document.hidden&&estado.modo==='debate')terminarDebate(false)});
+
+resize();
+requestAnimationFrame(function(t){reloj=t;bucle(t)});
+window.__escena={estado:estado,P:P,GUION:GUION,iniciarDebate:iniciarDebate,hora:function(h){horaActual=h;bgListo=false}};
+})();
+</script>
+</body>
+</html>
